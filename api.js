@@ -7,7 +7,7 @@ try{
 }
 
 module.exports = function(){
-  var CAH_CREATOR_BASE = "http://localhost:3000/socket_api/";
+  var CAH_CREATOR_BASE = "https://cahcreator.com/socket_api/";
 
   var _get = function(endpoint, qs, callback){
     qs = qs || {};
