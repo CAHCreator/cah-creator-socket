@@ -45,7 +45,8 @@ io.on("connection", function(socket){
 
   socket.on("deck:load", function(id){
     api.verifyAccessToDeck(socket.token, id, function(err, res){
-      if(res.has_access && res.deck){
+      // admin power!
+      if(res.has_access || res.user.admin && res.deck){
         var sessionId = randId(),
             sessionToken = randId();
 
