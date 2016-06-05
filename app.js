@@ -88,7 +88,8 @@ io.on("connection", function(socket){
     if(socket.session && socket.session.deck.black_cards[card.index] && parseInt(card.pick) !== NaN && parseInt(card.pick) > 0 && card.text.trim() !== "" && card.pick.trim() !== ""){
       socket.session.deck.black_cards[card.index] = { text: card.text, pick: parseInt(card.pick) };
       socket.to(socket.sessionId).emit("deck:card:black:edit", card);
-      socket.emit("deck:card:black:edit", card);
+      // we don't want to send it to the client because it already sees it as edited.
+      // socket.emit("deck:card:black:edit", card);
     }
   });
 
@@ -96,7 +97,8 @@ io.on("connection", function(socket){
     if(socket.session && socket.session.deck.white_cards[card.index] && card.text.trim() !== ""){
       socket.session.deck.white_cards[card.index] = card.text;
       socket.to(socket.sessionId).emit("deck:card:white:edit", card);
-      socket.emit("deck:card:white:edit", card);
+      // we don't want to send it to the client because it already sees it as edited.
+      // socket.emit("deck:card:white:edit", card);
     }
   });
 
