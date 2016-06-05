@@ -1,7 +1,3 @@
-// TODO literally all the server-side code is in one file.
-// I should probably split these up more. possibly use
-// actual models for the decks?
-
 var express = require('express'),
     app = express(),
     api = require('./api')(),

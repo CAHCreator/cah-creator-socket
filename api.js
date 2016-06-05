@@ -1,5 +1,10 @@
-var request = require('request'),
-    config = require('./config');
+var request = require('request');
+
+try{
+  var config = require('./config');
+}catch(e){
+  var config = JSON.parse(process.env.SOCKET_CONFIG);
+}
 
 module.exports = function(){
   var CAH_CREATOR_BASE = "http://localhost:3000/socket_api/";
