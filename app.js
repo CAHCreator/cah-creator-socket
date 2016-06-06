@@ -31,15 +31,31 @@ io.on("connection", function(socket){
 
   socket.on("authenticate:session", function(auth){
     if(sessions[auth.sessionId] && sessions[auth.sessionId].token === auth.sessionToken){
-      socket.session = sessions[auth.sessionId];
-      socket.sessionId = auth.sessionId;
-      socket.join(auth.sessionId);
+      var session = sessions[auth.sessionId];
 
-      socket.emit("session", {
-        sessionId: auth.sessionId,
-        sessionToken: auth.sessionToken,
-        deck: socket.session.deck
-      });
+      var complete = function(){
+        socket.session = sessions[auth.sessionId];
+        socket.sessionId = auth.sessionId;
+        socket.session.editorCount++;
+        socket.join(auth.sessionId);
+
+        socket.emit("session", {
+          sessionId: auth.sessionId,
+          sessionToken: auth.sessionToken,
+          deck: socket.session.deck
+        });
+      };
+
+      if(session.editorCount >= 2){
+        if(!session.premium){
+          socket.emit("session:needpremium");
+          socket.disconnect();
+        }else{
+          complete();
+        }
+      }else{
+        complete();
+      }
     }
   });
 
@@ -52,7 +68,9 @@ io.on("connection", function(socket){
 
         sessions[sessionId] = {
           token: sessionToken,
-          deck: res.deck
+          deck: res.deck,
+          editorCount: 1,
+          premium: res.user.premium
         };
 
         socket.session = sessions[sessionId];
@@ -126,6 +144,8 @@ io.on("connection", function(socket){
     if(socket.sessionCreator){
       socket.to(socket.sessionId).emit("session:end");
       sessions[socket.sessionId] = undefined;
+    }else if(socket.session){
+      socket.session.editorCount--;
     }
   });
 });

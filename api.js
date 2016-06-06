@@ -2,12 +2,13 @@ var request = require('request');
 
 try{
   var config = require('./config');
+  console.log(config);
 }catch(e){
   var config = JSON.parse(process.env.SOCKET_CONFIG);
 }
 
 module.exports = function(){
-  var CAH_CREATOR_BASE = "https://cahcreator.com/socket_api/";
+  var CAH_CREATOR_BASE = config.host + "/socket_api/";
 
   var _get = function(endpoint, qs, callback){
     qs = qs || {};
