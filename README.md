@@ -19,3 +19,11 @@ Everything here works based on *sessions*. Here's how it works:
   - If session ID/token:
     1. Send deck information over to user (authentication is implied).
     2. Add them to session.
+4. On disconnect:
+  - If user is session creator:
+    1. Send `session:end` message to all users in session.
+    2. Nullify session.
+    3. Clean up.
+  - If user is *not* session creator:
+    1. Remove user from session.
+    2. Do nothing.
